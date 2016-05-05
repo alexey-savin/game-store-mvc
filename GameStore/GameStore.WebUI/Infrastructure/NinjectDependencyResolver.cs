@@ -7,6 +7,7 @@ using Moq;
 using Ninject;
 using GameStore.Domain.Abstract;
 using GameStore.Domain.Entities;
+using GameStore.Domain.Concrete;
 
 namespace GameStore.WebUI.Infrastructure
 {
@@ -22,6 +23,7 @@ namespace GameStore.WebUI.Infrastructure
 
         private void AddBindings()
         {
+            /*
             Mock<IGameRepository> mock = new Mock<IGameRepository>();
             mock.Setup(m => m.Games)
                 .Returns(new List<Game>
@@ -32,6 +34,9 @@ namespace GameStore.WebUI.Infrastructure
                 });
 
             kernel.Bind<IGameRepository>().ToConstant(mock.Object);
+            */
+
+            kernel.Bind<IGameRepository>().To<EFGameRepository>();
         }
 
         public object GetService(Type serviceType) 
