@@ -33,7 +33,7 @@ namespace GameStore.UnitTests
             controller.PageSize = 3;
 
             // Действие (act)
-            GamesListViewModel result = (GamesListViewModel)controller.List(2).Model;
+            GamesListViewModel result = (GamesListViewModel)controller.List(null, 2).Model;
 
             // Утверждение (assert)
             List<Game> games = result.Games.ToList();
@@ -85,7 +85,7 @@ namespace GameStore.UnitTests
             controller.PageSize = 3;
 
             // Act
-            GamesListViewModel result = (GamesListViewModel)controller.List(2).Model;
+            GamesListViewModel result = (GamesListViewModel)controller.List(null, 2).Model;
 
             // Assert
             PagingInfo pageInfo = result.PagingInfo;
@@ -94,6 +94,56 @@ namespace GameStore.UnitTests
             Assert.AreEqual(3, pageInfo.ItemPerPage);
             Assert.AreEqual(5, pageInfo.TotalItems);
             Assert.AreEqual(2, pageInfo.TotalPages);
+        }
+
+        [TestMethod]
+        public void Can_Filter_Games()
+        {
+            // Arrange
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game>
+            {
+                new Game { GameId = 1, Name = "Игра1", Category="Cat1"},
+                new Game { GameId = 2, Name = "Игра2", Category="Cat2"},
+                new Game { GameId = 3, Name = "Игра3", Category="Cat1"},
+                new Game { GameId = 4, Name = "Игра4", Category="Cat2"},
+                new Game { GameId = 5, Name = "Игра5", Category="Cat3"}
+            });
+
+            GameController controller = new GameController(mock.Object);
+            controller.PageSize = 3;
+
+            // Act
+            List<Game> result = ((GamesListViewModel)controller.List("Cat2", 1).Model).Games.ToList();
+
+            // Assert
+            Assert.AreEqual(2, result.Count);
+            Assert.IsTrue(result[0].Name == "Игра2" && result[0].Category == "Cat2");
+            Assert.IsTrue(result[1].Name == "Игра4" && result[1].Category == "Cat2");
+        }
+
+        [TestMethod]
+        public void Can_Create_Categories()
+        {
+            // Arrange
+            Mock<IGameRepository> mock = new Mock<IGameRepository>();
+            mock.Setup(m => m.Games).Returns(new List<Game> {
+                new Game { GameId = 1, Name = "Игра1", Category="Симулятор"},
+                new Game { GameId = 2, Name = "Игра2", Category="Симулятор"},
+                new Game { GameId = 3, Name = "Игра3", Category="Шутер"},
+                new Game { GameId = 4, Name = "Игра4", Category="RPG"},
+            });
+
+            NavController nav = new NavController(mock.Object);
+
+            // Act
+            List<string> result = ((IEnumerable<string>)nav.Menu().Model).ToList();
+
+            // Assert
+            Assert.AreEqual(3, result.Count, 3);
+            Assert.AreEqual("RPG", result[0]);
+            Assert.AreEqual("Симулятор", result[1]);
+            Assert.AreEqual("Шутер", result[2]);
         }
     }
 }
