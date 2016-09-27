@@ -16,8 +16,10 @@ namespace GameStore.WebUI.Controllers
             _repository = repo;
         }
 
-        public PartialViewResult Menu()
+        public PartialViewResult Menu(string category = null)
         {
+            ViewBag.SelectedCategory = category;
+
             IEnumerable<string> categories = _repository.Games
                 .Select(g => g.Category)
                 .Distinct()

@@ -19,11 +19,6 @@ namespace GameStore.WebUI.Controllers
 
         public ViewResult List(string category, int page = 1)
         {
-            //return View(_repository.Games
-            //    .OrderBy(game => game.GameId)
-            //    .Skip((page - 1) * PageSize)
-            //    .Take(PageSize));
-
             GamesListViewModel viewModel = new GamesListViewModel
             {
                 Games = _repository.Games
@@ -35,7 +30,9 @@ namespace GameStore.WebUI.Controllers
                 {
                     CurrentPage = page,
                     ItemPerPage = PageSize,
-                    TotalItems = _repository.Games.Count()
+                    TotalItems = category == null ? 
+                        _repository.Games.Count() :
+                        _repository.Games.Where(g => g.Category == category).Count()
                 },
                 CurrentCategory = category
             };
