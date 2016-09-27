@@ -2,6 +2,7 @@
 using GameStore.Domain.Entities;
 using System.Web.Mvc;
 using System.Linq;
+using GameStore.WebUI.Models;
 
 namespace GameStore.WebUI.Controllers
 {
@@ -18,10 +19,26 @@ namespace GameStore.WebUI.Controllers
 
         public ViewResult List(int page = 1)
         {
-            return View(_repository.Games
-                .OrderBy(game => game.GameId)
-                .Skip((page - 1) * PageSize)
-                .Take(PageSize));
+            //return View(_repository.Games
+            //    .OrderBy(game => game.GameId)
+            //    .Skip((page - 1) * PageSize)
+            //    .Take(PageSize));
+
+            GamesListViewModel viewModel = new GamesListViewModel
+            {
+                Games = _repository.Games
+                    .OrderBy(g => g.GameId)
+                    .Skip((page - 1) * PageSize)
+                    .Take(PageSize),
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = page,
+                    ItemPerPage = PageSize,
+                    TotalItems = _repository.Games.Count()
+                }
+            };
+
+            return View(viewModel);
         }
     }
 }
