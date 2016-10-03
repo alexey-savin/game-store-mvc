@@ -12,17 +12,32 @@ namespace GameStore.Domain.Entities
 
         public void AddItem(Game game, int quantity)
         {
+            CartLine line = _lineCollection
+                .Where(g => g.Game.GameId == game.GameId)
+                .FirstOrDefault();
 
+            if (line == null)
+            {
+                _lineCollection.Add(new CartLine
+                {
+                    Game = game,
+                    Quantity = quantity
+                });
+            }
+            else
+            {
+                line.Quantity += quantity;
+            }
         }
 
         public void RemoveLine(Game game)
         {
-
+            _lineCollection.RemoveAll(l => l.Game.GameId == game.GameId);
         }
 
         public decimal ComputeTotalValue()
         {
-            return 0;
+            return _lineCollection.Sum(e => e.Game.Price * e.Quantity);
         }
 
         public void Clear()
