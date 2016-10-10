@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using GameStore.Domain.Entities;
+using GameStore.WebUI.Infrastructure.Binders;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -13,6 +11,8 @@ namespace GameStore.WebUI
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            ModelBinders.Binders.Add(typeof(Cart), new CartModelBinder());
         }
     }
 }
