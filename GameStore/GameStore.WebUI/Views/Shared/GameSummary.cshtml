@@ -9,7 +9,7 @@
     {
         <div class="pull-right">
             @Html.HiddenFor(x => x.GameId)
-            @Html.Hidden("retunUrl", Request.Url.PathAndQuery)
+            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
             <input type="submit" class="btn btn-success" value="Add to cart" />
         </div>
     }
