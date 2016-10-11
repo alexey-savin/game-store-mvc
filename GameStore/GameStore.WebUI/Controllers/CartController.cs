@@ -32,6 +32,11 @@ namespace GameStore.WebUI.Controllers
             });
         }
 
+        public ViewResult Checkout(Cart cart, ShippingDetails shippingDetails)
+        {
+            return View(new ShippingDetails());
+        }
+
         public RedirectToRouteResult AddToCart(Cart cart, int gameId, string returnUrl)
         {
             Game game = _repository.Games

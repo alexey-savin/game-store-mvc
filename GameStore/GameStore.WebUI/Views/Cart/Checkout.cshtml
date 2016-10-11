@@ -1,0 +1,39 @@
+﻿@model GameStore.Domain.Entities.ShippingDetails
+
+@{ 
+    ViewBag.Title = "GameStore: checkout";
+}
+
+<h2>Оформить заказ сейчас</h2>
+<p>Введите ваши контактные данные</p>
+
+@using (Html.BeginForm())
+{
+    <h3>Данные</h3>
+    <div class="form-group">
+        <label>Name</label>
+        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+    </div>
+
+    <h3>Shipping address</h3>
+    foreach (var property in ViewData.ModelMetadata.Properties
+        .Where(p => p.PropertyName != "Name" && p.PropertyName != "GiftWrap"))
+    {
+        <div class="form-group">
+            <label>@(property.DisplayName ?? property.PropertyName)</label>
+            @Html.TextBox(property.PropertyName, null, new { @class = "form-control" })
+        </div>
+    }
+
+    <h3>Options</h3>
+    <div class="checkbox">
+        <label>
+            @Html.EditorFor(x => x.GiftWrap)
+            Use gift wrap?
+        </label>
+    </div>
+
+    <div class="text-center">
+        <input class="btn btn-primary" type="submit" value="Process order" />
+    </div>
+}
