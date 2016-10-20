@@ -1,10 +1,7 @@
 ﻿using GameStore.Domain.Abstract;
 using GameStore.Domain.Entities;
 using GameStore.WebUI.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace GameStore.WebUI.Controllers
@@ -84,19 +81,6 @@ namespace GameStore.WebUI.Controllers
             }
 
             return RedirectToAction("Index", new { returnUrl });
-        }
-
-        public Cart GetCart()
-        {
-            Cart cart = (Cart)Session["Cart"];
-
-            if (cart == null)
-            {
-                cart = new Cart();
-                Session["Cart"] = cart;
-            }
-
-            return cart;
         }
     }
 }
